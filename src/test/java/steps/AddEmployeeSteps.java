@@ -3,15 +3,19 @@ package steps;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import junit.framework.Assert;
 import pages.AddEmployeePage;
 import pages.DashBoardPage;
 import utils.CommonMethods;
 import utils.Constants;
 import utils.ExcelReading;
+import utils.GlobalVariables;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static junit.framework.Assert.*;
 
 public class AddEmployeeSteps extends CommonMethods {
     @When("user clicks on PIM option")
@@ -40,6 +44,9 @@ public class AddEmployeeSteps extends CommonMethods {
         sendText(add.firstName, firstName);
         sendText(add.middleName, middleName);
         sendText(add.lastName, lastName);
+        GlobalVariables.FirstName=firstName;
+        GlobalVariables.MiddleName=middleName;
+        GlobalVariables.LastName=lastName;
 
     }
 
@@ -49,6 +56,7 @@ public class AddEmployeeSteps extends CommonMethods {
         sendText(add.firstName, FirstName);
         sendText(add.middleName, MiddleName);
         sendText(add.lastName, LastName);
+
     }
 
     @When("user clicks on save button option")
@@ -101,6 +109,26 @@ public class AddEmployeeSteps extends CommonMethods {
             Thread.sleep(1000);
         }
     }
+    @When("capture the employeeId")
+    public void capture_the_employee_id() {
+        AddEmployeePage addEmployeePage=new AddEmployeePage();
+        GlobalVariables.empID=addEmployeePage.emplpyeeID.getAttribute("value");
+    }
 
+    @Then("verify the date from frontend and backend")
+    public void verify_the_date_from_frontend_and_backend() {
+        System.out.println("backend");
+        System.out.println("DBFirstName"+GlobalVariables.dbFirstName);
+        System.out.println("DBMiddleName"+GlobalVariables.dbMiddleName);
+        System.out.println("DBLastName"+GlobalVariables.dbLastName);
+        System.out.println("frontend");
+        System.out.println("FirstName"+GlobalVariables.FirstName);
+        System.out.println("MiddleName"+GlobalVariables.MiddleName);
+        System.out.println("LastName"+GlobalVariables.LastName);
+        Assert.assertEquals(GlobalVariables.FirstName,GlobalVariables.dbFirstName);
+        Assert.assertEquals(GlobalVariables.MiddleName,GlobalVariables.dbMiddleName);
+        Assert.assertEquals(GlobalVariables.LastName,GlobalVariables.dbLastName);
+
+            }
 
 }
